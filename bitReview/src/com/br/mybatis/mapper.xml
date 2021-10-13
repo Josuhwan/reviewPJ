@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="br">
+	
+	
+	<!-- 글 작성 insert -->
+	<insert id="insert" parameterType="bVO">
+		INSERT INTO BOARD 
+				(BOARD_ID, WRITER ,TITLE, B_CONTENT, B_REGDATE,
+				 HIT, B_UPDOWN, TP_ID)
+		VALUES 
+				(BOARD_SEQ.NEXTVAL, #{writer}, #{title}, #{b_content}, SYSDATE,
+				 0, 0, #{tp_id})
+		
+		<!--  
+		INSERT INTO BOARD 
+				(BOARD_ID, WRITER ,TITLE, B_CONTENT, B_REGDATE,
+				 HIT, B_UPDOWN, TP_ID, FILE_ID, FILE_NAME)
+		VALUES 
+				(BOARD_SEQ.NEXTVAL, #{writer}, #{title}, #{b_content}, SYSDATE,
+				 0, 0, #{tp_id}, FILE_SEQ.NEXTVAL, #{fild_name})
+		-->
+		
+	</insert>
+	
+	<!-- 글 전체 목록 불러오기 -->
+	<select id="list" resultType="bVO">
+		SELECT * FROM BOARD
+	</select>
+	
+	<!-- 글 상세보기 -->
+	<select id="view" resultType="bVO">
+		SELECT board_id, writer, title, b_content, b_regdate,
+		tp_id, file_name, hit, b_updown
+  		FROM board
+	</select>
+</mapper>
+
+
+
+
+
+
+
+

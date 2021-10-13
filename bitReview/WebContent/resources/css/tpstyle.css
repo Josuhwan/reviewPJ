@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+.css-tp {
+	display: inline-block;
+	vertical-align: top;
+	box-sizing: border-box;
+	margin: 0 0 24px;
+	width: 230px;
+	height: 390px;
+}
+
+.css-img {
+	position: relative;
+	width: 100%;
+	height: 0;
+	padding-bottom: 145%;
+}
+
+li {
+	text-align: -webrit-match-parent;
+}
