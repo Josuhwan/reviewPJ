@@ -21,28 +21,27 @@ public class WriterCommand implements Command {
 		
 		//1. 파라미터 값 가져오기
 		
-		//String tpid = request.getParameter("tpid");
-
 		ServletContext context= request.getSession().getServletContext();
-		String path = context.getRealPath("/resources/upload");
+		String f_path = context.getRealPath("/resources/upload");
+		System.out.println(f_path +"경로값");
 		
-		MultipartRequest mr = new MultipartRequest(request, path, 10 * 1024 * 1024, "UTF-8", new DefaultFileRenamePolicy());
+		MultipartRequest mr = new MultipartRequest(request, f_path, 10 * 1024 * 1024, "UTF-8");
 		
-		String tpfile = mr.getOriginalFileName("tpfile");
+		String f_name = mr.getOriginalFileName("tpfile");
+		System.out.println(f_name +"파일네임");
 		String writer = mr.getParameter("writer");
 		String title = mr.getParameter("title");
 		String b_content = mr.getParameter("b_content");
 	
-		
-		System.out.println( " 2222 "+ tpfile + " 333 "+writer);
 		
 		//2. 가져온 값 vo에 저장"
 		BoardVO bvo = new BoardVO();
 		bvo.setTitle(title);
 		bvo.setB_content(b_content);
 		bvo.setWriter(writer);
-		bvo.setTp_id(2);
-//		bvo.setFild_name(tpfile);
+//		bvo.setTp_id(2);
+		bvo.setF_name(f_name);
+		bvo.setF_path(f_path);
 		
 		BoardDAO.insert(bvo);
 		

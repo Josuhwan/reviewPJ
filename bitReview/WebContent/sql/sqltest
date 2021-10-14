@@ -34,3 +34,50 @@ LEFT OUTER JOIN TPFILE F ON (B.FILE_ID = F.FILE_ID);
 SELECT *
 FROM BOARD B
 LEFT OUTER JOIN TVPROGRAM T ON (B.TP_ID = T.TP_ID);
+
+SELECT BOARD_ID, TITLE, WRITER, B_CONTENT, B_REGDATE, HIT, B_UPDOWN, T.TP_NAME
+FROM BOARD B, tvprogram T
+WHERE t.tp_id = b.tp_id AND BOARD_ID = 2;
+
+
+SELECT * FROM TVPROGRAM;
+
+SELECT * FROM tvprogram;
+SELECT * FROM tpfile;
+
+SELECT * FROM board;
+
+SELECT * FROM MEMBER;
+
+/*
+DROP TABLE board;
+drop table reply;
+drop table movieboard;
+DROP TABLE TPFILE;
+*/
+
+SELECT B.*
+FROM BOARD B, TVPROGRAM T, TPFILE F
+WHERE B.TP_ID = T.TP_ID AND F.F_ID = B.F_ID;
+
+
+INSERT INTO BOARD (TP_BOARDID, WRITER, TITLE, B_CONTENT, B_REGDATE, HIT, B_UPDOWN, TP_ID, MEMBER_ID, F_ID, F_NAME, F_PATH)
+VALUES (BOARD_SEQ.NEXTVAL, '글쓴이', '제목이다', '내용이다', SYSDATE, 0, 0, 2, TPFILE_SEQ.nextval, 2, '파일이름', '파일경로');
+
+SELECT * FROM member WHERE MEMBER_ID = 2;
+SELECT * FROM TPFILE WHERE F_ID = 2;
+SELECT * FROM TVPROGRAM WHERE TP_ID = 2;
+
+INSERT INTO MEMBER (MEMBER_ID, NICKNAME, NAME, PHONE, EMAIL, LOGIN_ID, LOGIN_PW, BRITH)
+VALUES (MEMBER_SEQ.NEXTVAL, '뽀로로', '홍길동', '010-1234-5678', 'RORO@NAVER.COM', 'RORO', 'RORO', '91/09/12');
+
+insert into tpfile (f_id, f_name, f_path)
+values (TPFILE_SEQ.nextval, '파일이름.img', '/sdfsa');
+
+insert into tvprogram (tp_id, tp_name, tp_member, tp_genre, tp_brdcs, tp_country, tp_content)
+values (TVPROGRAM_SEQ.nextval, '오징어게임', '이정재,ㅇㅇㅇ', '스릴러', '넷플릭스', '한국', '재밌는 내용');        
+
+SELECT B.*, T.TP_NAME
+FROM BOARD B, TVPROGRAM T
+WHERE B.TP_ID = T.TP_ID;
+        

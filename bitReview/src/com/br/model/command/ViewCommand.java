@@ -16,13 +16,18 @@ public class ViewCommand implements Command {
 	@Override
 	public String exec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		
+		String tpboard_id = request.getParameter("tp_boardid");
+		int tp_boardid = Integer.parseInt(tpboard_id);
+		
+		
 		//1. 디비연결하고 데이터 가져오기 (글제목, 글내용, 티비프로, 작성자, 조회수, 추천수 ,이미지?
-		List<BoardVO> view = BoardDAO.getView();
-		
+		BoardVO one = BoardDAO.selectOne(tp_boardid);
+	
 		//2. 응답페이지(TPview.jsp)에 데이터 전달
-		request.setAttribute("view", view);
+		request.setAttribute("one", one);
 		
-		System.out.println(view+ "ddd");
+		System.out.println(one+ "ddd");
 		//3. 응답페이지(TPview.jsp)로 화면 이동(전환)
 		return "tvProgram/TPview.jsp";
 	}

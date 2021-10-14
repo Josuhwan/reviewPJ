@@ -1,6 +1,9 @@
+<%@page import="com.br.model.dao.BoardDAO"%>
+<%@page import="com.br.model.vo.BoardVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,6 +67,9 @@ A:visited {text-decoration:none; color:#646464;}
      z-index: 2;
      text-align: center;
 }
+#hit, #updown {
+	pont-size : 1rem;
+}
 #info{
      position: absolute;
      top:90%;
@@ -79,20 +85,32 @@ A:visited {text-decoration:none; color:#646464;}
 </style>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script>
+	$(document).ready(function(){
+		$("replyBtn").click(replyGO);
+	});
+	function replyGO() {
+		$.ajax{
+				url:,
+				data:{
+						
+				},
+				type:"post",
+					
+					
+			} 
+		})
+	})
+</script>
 </head>
 <body>
-<h2>일단 온거만 확인</h2>
-
-<c:forEach var="vo" items="${view }">
-	<li>${vo.board_id }, ${vo.writer }, ${vo.title }, ${vo.b_content }, $vo.{b_regdate },
-	 ${vo.tp_id }, ${vo.hit }, ${vo.b_updown }
-</c:forEach>
-
 <br><br><br>
 <header>
+ <label id="hit">조회수 ${one.hit }</label>
+   	   <label id="updown">좋아요 ${one.b_updown }</label><br>
  <div class="img">
    <div class="content">
-       <label id="title">${article.title}</label><br>
+       <label id="title">${one.title }</label><br>
        <c:if test="${article.simpleReview != null}">
        <label id="review">"${article.simpleReview}"</label>
        </c:if>
@@ -100,8 +118,8 @@ A:visited {text-decoration:none; color:#646464;}
    <div class="img-cover">
    </div>
       <div align="right" id="info">
-      <h5 id="nickname">by. ############</h5>
-         <h6>#################</h6>
+      <h5 id="nickname">${one.writer }</h5>
+         <h6>${one.b_regdate }</h6>
       </div>
 </div>
 </header>
@@ -131,8 +149,8 @@ A:visited {text-decoration:none; color:#646464;}
        <br><br>
       </div>
     
-      <c:if test="${article.content ne null}">
-         ${article.content}
+      <c:if test="${one.b_content ne null}">
+         ${one.b_content}
       </c:if>
       
       <br><br><br><br><br><br><br>
@@ -151,9 +169,9 @@ A:visited {text-decoration:none; color:#646464;}
              <div class="border p-4">
               <div align="center">
                     <img src="${root}/upload/profile/${article.saveFolder}/${article.save_proPicture}" class="align-self-start mb-3 rounded-circle"style="width:100px">
-                   <a href="javascript:mvMyPage('${article.post_id}');"><h4>${article.nickname}</h4></a> 
+                   <a href="javascript:mvMyPage('${article.post_id}');"><h4>${one.writer}</h4></a> 
                 <div>
-                   <p>${article.introduce}</p>
+                   <p>${one.tp_name}</p>
                 </div>
                 
                 <c:if test="${followStatus.follow_no == null}">
@@ -194,12 +212,12 @@ A:visited {text-decoration:none; color:#646464;}
               </div> <!--<div class="border p-4">-->
             <hr/>
          <div id="replyview">
+         <h2>댓글라인</h2>
          </div>
-         
             <!---- 댓글 작성창------>
               <div class="media border p-3">
                 <div class="media-body">
-                     <textarea class="form-control" rows="4" placeholder="내용을 입력해주세요" id="reply_content"></textarea>
+                     <textarea class="form-control" rows="4" placeholder="내용을 입력해주세요" id="r_content"></textarea>
                   </div>
                   <div>
                   <button id="replyBtn"  style="margin-left: 13px;">등록</button>

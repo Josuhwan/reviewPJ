@@ -10,7 +10,28 @@
 
 <link href="../resources/css/shop-homepage.css" rel="stylesheet">
 -->
-
+<style>
+ul.liststyle, ol.liststyle {
+	display: inline-block;
+    list-style: none;
+    margin: 20px;
+    padding: 50px;
+  
+    width: 100%;
+}
+  
+ul.liststyle li, ol.liststyle li {
+    display: inline-block;
+    padding: 20px;
+    margin-bottom: 30px;
+    margin-left: 20px;
+    border: 1px solid #efefef;
+    font-size: 12px;
+    cursor: pointer;
+    width: 260px;
+    height: 360px;
+}
+</style>
 <meta charset="UTF-8">
 <title>메인</title>
 <script>
@@ -21,7 +42,19 @@
 </head>
 <body>
 <!-- Navigation -->
-
+		<ul class="liststyle">
+		<c:forEach var="vo" items="${list }">
+			<a title="${vo.tp_boardid }" href="tpcontroller?type=view&tp_boardid=${vo.tp_boardid}">
+	        <li>
+	        	<div>영화이미지</div>
+	        	<div>${vo.title}</div>
+	        	<div>${vo.writer}</div>
+	        	<div>방송사</div>
+	        	<div>나라</div>
+			</li>        
+   			</a>
+		</c:forEach>
+		</ul>
 		<c:forEach var="vo" items="${list }">
 		<table border>
 		  <tr>
@@ -48,10 +81,6 @@
 		    <td>ㅇㅇㅇㅇㅇㅇ</td>
 		  </tr>  
 		</table>
-		</c:forEach>
-		<c:forEach var="vo" items="${list }">
-		<div>11</div>
-		<div>22</div>
 		</c:forEach>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">

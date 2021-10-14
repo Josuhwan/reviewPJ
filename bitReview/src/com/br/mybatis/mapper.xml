@@ -6,37 +6,36 @@
 <mapper namespace="br">
 	
 	
+	
 	<!-- 글 작성 insert -->
 	<insert id="insert" parameterType="bVO">
 		INSERT INTO BOARD 
-				(BOARD_ID, WRITER ,TITLE, B_CONTENT, B_REGDATE,
-				 HIT, B_UPDOWN, TP_ID)
+				(TP_BOARDID, WRITER, TITLE, B_CONTENT, B_REGDATE,
+				 HIT, B_UPDOWN, TP_ID, MEMBER_ID, F_ID,
+				 F_NAME, F_PATH)
 		VALUES 
 				(BOARD_SEQ.NEXTVAL, #{writer}, #{title}, #{b_content}, SYSDATE,
-				 0, 0, #{tp_id})
-		
-		<!--  
-		INSERT INTO BOARD 
-				(BOARD_ID, WRITER ,TITLE, B_CONTENT, B_REGDATE,
-				 HIT, B_UPDOWN, TP_ID, FILE_ID, FILE_NAME)
-		VALUES 
-				(BOARD_SEQ.NEXTVAL, #{writer}, #{title}, #{b_content}, SYSDATE,
-				 0, 0, #{tp_id}, FILE_SEQ.NEXTVAL, #{fild_name})
-		-->
-		
+				0, 0, 2, 2, TPFILE_SEQ.nextval,
+				 #{f_name}, #{f_path})
+
 	</insert>
 	
 	<!-- 글 전체 목록 불러오기 -->
 	<select id="list" resultType="bVO">
-		SELECT * FROM BOARD
+		SELECT B.*, T.TP_NAME
+		FROM BOARD B, TVPROGRAM T
+		WHERE B.TP_ID = T.TP_ID
 	</select>
 	
 	<!-- 글 상세보기 -->
-	<select id="view" resultType="bVO">
-		SELECT board_id, writer, title, b_content, b_regdate,
-		tp_id, file_name, hit, b_updown
-  		FROM board
+	<select id="one" resultType="bVO"  parameterType="int">
+		SELECT TP_BOARDID, TITLE, WRITER, B_CONTENT, B_REGDATE, HIT, B_UPDOWN, T.TP_NAME
+		FROM BOARD B, tvprogram T
+		WHERE t.tp_id = b.tp_id AND TP_BOARDID = #{tp_boardid}
+
 	</select>
+	
+	
 </mapper>
 
 

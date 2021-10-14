@@ -27,12 +27,13 @@ public class BoardDAO {
 		
 		return list;
 	}
-
-	public static List<BoardVO> getView() {
+	
+	// 글 보기
+	public static BoardVO selectOne(int b_id) {
 		SqlSession ss = DBService.getFactory().openSession();
-		List<BoardVO> view = ss.selectList("br.view");
+		BoardVO one = ss.selectOne("br.one", b_id);
 		ss.close();
 		
-		return view;
+		return one;
 	}
 }
