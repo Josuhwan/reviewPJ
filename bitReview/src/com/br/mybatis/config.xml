@@ -10,6 +10,7 @@
 	
 	<typeAliases>
 		<typeAlias type="com.br.model.vo.BoardVO" alias="bVO"/>
+		<typeAlias type="com.br.model.vo.ReplyVO" alias="rVO"/>
 	</typeAliases>
 	
   <environments default="development">

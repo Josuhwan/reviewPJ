@@ -55,33 +55,7 @@ ul.liststyle li, ol.liststyle li {
    			</a>
 		</c:forEach>
 		</ul>
-		<c:forEach var="vo" items="${list }">
-		<table border>
-		  <tr>
-	    	<th>오징어게임</th>  
-		  </tr>
-		  <tr>
-		    <td>이미지</td>
-		    <td>########</td>
-		  </tr>
-		  <tr>
-		    <td>제목</td>
-		    <td>########</td>  
-		  </tr>
-		  <tr>
-		    <td>작성자</td>
-		    <td>########</td>
-		  </tr>
-		  <tr>
-		    <td>방송사</td>
-		    <td>넷플릭스</td>
-		  </tr>
-		  <tr>
-		    <td>한국</td>
-		    <td>ㅇㅇㅇㅇㅇㅇ</td>
-		  </tr>  
-		</table>
-		</c:forEach>
+		
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#">Start Bootstrap</a>

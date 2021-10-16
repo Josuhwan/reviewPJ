@@ -18,9 +18,19 @@ public class BoardVO {
 	private String f_path;
 	private String tp_name;
 	
+//	private ReplyVO replyvo;
 	
 	
 	
+	
+//	public ReplyVO getReplyvo() {
+//		return replyvo;
+//	}
+//
+//	public void setReplyvo(ReplyVO replyvo) {
+//		this.replyvo = replyvo;
+//	}
+
 	public int getF_id() {
 		return f_id;
 	}

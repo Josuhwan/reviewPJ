@@ -5,6 +5,35 @@
   
 <mapper namespace="br">
 	
+	<!-- 
+	<resultMap type="BoardVO" id="BoardVO">
+		<result column="tp_boardid" property="tp_boardid"/>
+		<result column="writer" property="writer"/>
+		<result column="title" property="title"/>
+		<result column="b_regdate" property="b_regdate"/>
+		<result column="b_content" property="b_content"/>
+		<result column="updatedate" property="updatedate"/>
+		<result column="deletedate" property="deletedate"/>
+		<result column="hit" property="hit"/>
+		<result column="tp_id" property="tp_id"/>
+		<result column="b_updown" property="b_updown"/>
+		<result column="f_id" property="f_id"/>
+		<result column="f_name" property="f_name"/>
+		<result column="f_path" property="f_path"/>
+		<result column="tp_name" property="tp_name"/>
+		<collection property="replyvo" resultMap="replyvo"/>
+	</resultMap>
+	
+	<resultMap type="BoardVO" id="BoardVO">
+		<result column="tp_replyid" property="tp_replyid"/>
+		<result column="tp_boardid" property="tp_boardid"/>
+		<result column="r_writer" property="r_writer"/>
+		<result column="r_content" property="r_content"/>
+		<result column="r_regdate" property="r_regdate"/>
+		<result column="r_updown" property="r_updown"/>
+	</resultMap>
+	-->
+
 	
 	
 	<!-- 글 작성 insert -->
@@ -35,7 +64,18 @@
 
 	</select>
 	
+	<!-- 댓글 작성하기 -->
+	<insert id="replyInsert" parameterType="rVO">		
+		INSERT INTO REPLY (TP_REPLYID, TP_BOARDID, R_WRITER, R_CONTENT, R_REGDATE, R_UPDOWN) 
+		VALUES (REPLY_SEQ.NEXTVAL, #{tp_boardid}, #{r_writer}, #{r_content}, SYSDATE, 0)
+	</insert>
 	
+	<!-- 해당 글 댓글 전체 불러오기 -->
+	<select id="rlist" resultType="rVO" parameterType="int">
+		SELECT TP_REPLYID, TP_BOARDID, R_WRITER, R_CONTENT, R_REGDATE, R_UPDOWN
+		FROM REPLY
+		WHERE TP_BOARDID = #{tp_boardid}
+	</select>
 </mapper>
 
 

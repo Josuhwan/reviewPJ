@@ -2,26 +2,28 @@ package com.br.model.vo;
 
 public class ReplyVO {
 	
-	private int reply_id;
-	private int board_id;
+	private int tp_replyid;
+	private int tp_boardid;
 	private String r_writer;
 	private String r_content;
 	private String r_regdate;
 	private int r_updown;
 	
 	
-	public int getReply_id() {
-		return reply_id;
+	public int getTp_replyid() {
+		return tp_replyid;
 	}
-	public void setReply_id(int reply_id) {
-		this.reply_id = reply_id;
+	public void setTp_replyid(int tp_replyid) {
+		this.tp_replyid = tp_replyid;
 	}
-	public int getBoard_id() {
-		return board_id;
+	
+	public int getTp_boardid() {
+		return tp_boardid;
 	}
-	public void setBoard_id(int board_id) {
-		this.board_id = board_id;
+	public void setTp_boardid(int tp_boardid) {
+		this.tp_boardid = tp_boardid;
 	}
+	
 	public String getR_writer() {
 		return r_writer;
 	}
@@ -46,6 +48,12 @@ public class ReplyVO {
 	public void setR_updown(int r_updown) {
 		this.r_updown = r_updown;
 	}
+	@Override
+	public String toString() {
+		return "ReplyVO [tp_replyid=" + tp_replyid + ", tp_boardid=" + tp_boardid + ", r_writer=" + r_writer
+				+ ", r_content=" + r_content + ", r_regdate=" + r_regdate + ", r_updown=" + r_updown + "]";
+	}
+	
 	
 	
 }

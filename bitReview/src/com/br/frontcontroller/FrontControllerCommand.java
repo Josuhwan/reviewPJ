@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.br.model.command.Command;
+import com.br.model.command.RelpyInsertCommand;
+
 import com.br.model.command.TPMainCommand;
 import com.br.model.command.ViewCommand;
 import com.br.model.command.WriterCommand;
@@ -34,6 +36,8 @@ public class FrontControllerCommand extends HttpServlet {
 			command = new ViewCommand();
 		} else if ("main".equals(type)) {
 			command = new TPMainCommand();
+		} else if ("reply".equals(type)) {
+			command = new RelpyInsertCommand();
 		}
 		
 		String path = command.exec(request, response);
@@ -41,10 +45,10 @@ public class FrontControllerCommand extends HttpServlet {
 	}
 	
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(">> FrontControllerCommand doPost() 실행-----------------");
-		req.setCharacterEncoding("UTF-8");
-		doGet(req, resp);
+		request.setCharacterEncoding("UTF-8");
+		doGet(request, response);
 	}
 	
 }

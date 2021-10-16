@@ -85,29 +85,74 @@ A:visited {text-decoration:none; color:#646464;}
 </style>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-	$(document).ready(function(){
-		$("replyBtn").click(replyGO);
-	});
-	function replyGO() {
-		$.ajax{
-				url:,
-				data:{
-						
-				},
-				type:"post",
-					
-					
-			} 
-		})
-	})
+
+      $.ajaxSetup({
+        async:true,
+        dataType:"json",
+        error:function(xhr) {
+            console.log("error html = " + xhr.statusText);
+        }
+    });
+    
+    $(document).ready(function() {
+    	getRlist();
+    });
+    
+    function getList() {
+        $.ajax({
+           url : 'tpcontroller?',
+           data : { 
+        	   tp_boardid:"${one.tp_boardid}"
+           },
+           success : function(data) {
+              console.log("댓글 불러오기")
+           }
+        });
+     }
+    
+    
+	 // Ajax 댓글작성
+    $(function() {
+        $("#replyWrite").on("click", function() {
+        	let r_content = $("#replyContent").val();
+            $.ajax({
+                url:"tpcontroller?type=reply",
+                type:"post",		
+                data:{
+                	r_content:$("#replyContent").val(),
+                    tp_boardid:"${one.tp_boardid}"
+                },
+                
+                success:function(data) {            // 서버에 대한 정상응답이 오면 실행, callback
+                    if(data.result == 1) {            // 쿼리 정상 완료, 결과
+                        console.log("comment가 정상적으로 입력되었습니다.");
+                        $("#replyContent").val("");
+                        showReply(data.comments, 1);
+                    }
+                }
+            })
+        });
+    });
+	 
+	// 글 상세 - > 목록으로(메인페이지이동) 
+ 	function mainGO() {	
+	 		location.href = "tpcontroller?type=main";
+ 		
+ 	};
+    
 </script>
+
+
 </head>
 <body>
 <br><br><br>
 <header>
- <label id="hit">조회수 ${one.hit }</label>
-   	   <label id="updown">좋아요 ${one.b_updown }</label><br>
+ 	   <label id="hit">조회수 ${one.hit }</label>
+   	   <label id="updown">좋아요 ${one.b_updown }</label>
+   	   <input type="button" value="목록으로" id="mainList" onclick="mainGO();">
+   	   <br>
  <div class="img">
    <div class="content">
        <label id="title">${one.title }</label><br>
@@ -211,20 +256,35 @@ A:visited {text-decoration:none; color:#646464;}
                 </div>  <!-- <div align="center"> -->
               </div> <!--<div class="border p-4">-->
             <hr/>
-         <div id="replyview">
+        
          <h2>댓글라인</h2>
-         </div>
-            <!---- 댓글 작성창------>
-              <div class="media border p-3">
-                <div class="media-body">
-                     <textarea class="form-control" rows="4" placeholder="내용을 입력해주세요" id="r_content"></textarea>
-                  </div>
-                  <div>
-                  <button id="replyBtn"  style="margin-left: 13px;">등록</button>
-                 </div>
-              </div>
-            <br>
-       </div>
+         <c:forEach var="rvo" items="${rlist }">
+         	<table class='table table-striped table-bordered' style= 'margin-top: 10px;'>
+			 	<tbody>
+			   		<tr align='center'>
+			  			<td> ${rvo.tp_replyid} </td>
+			  			<td> ${rvo.r_writer } </td>
+			 			<td> ${rvo.r_content } </td>
+			   			<td> ${rvo.r_regdate } </td>
+			  		</tr>
+			 	</tbody>
+			 </table>	
+         </c:forEach>
+         		<!-- 댓글 라인 -->
+	         <div class="input-group" role="group" aria-label="..." style="margin-top: 10px; width: 100%;">
+    			<div id="showComment" style="text-align: center;"></div>
+			</div>
+
+				<!-- 댓글 작성창 -->
+	         <div class="input-group" role="group" aria-label="..." style="margin-top: 10px; width: 100%;">
+	    		<textarea class="form-control" rows="3" id="replyContent" placeholder="댓글을 입력하세요." style="width: 100%;" ></textarea>
+	    		<div class="btn-group btn-group-sm" role="group" aria-label="...">
+	            <input type="button" class="btn btn-default" value="댓글 쓰기" id="replyWrite">
+				<input type="button" class="btn btn-default" value="댓글 읽기(${article.commentCount})" 
+                onclick="getComment(1, event)" id="commentRead">
+	    	</div>
+		</div>
+ 
 </main>
 </div> <!-- /container -->
 </body>
