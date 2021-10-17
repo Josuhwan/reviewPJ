@@ -46,7 +46,7 @@ A:visited {text-decoration:none; color:#646464;}
 }
 .img{
     position: relative;
-    background-image: url("${root}/upload/album/${article.psavefolder}/${article.save_postPicture}");                                                               
+    background-image: url("##");                                                               
     height: 50vh;
     background-size: cover;
 }
@@ -88,31 +88,16 @@ A:visited {text-decoration:none; color:#646464;}
 <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
-      $.ajaxSetup({
-        async:true,
-        dataType:"json",
-        error:function(xhr) {
-            console.log("error html = " + xhr.statusText);
+    $.ajaxSetup({
+       async:true,
+       dataType:"json",
+       error:function(xhr) {
+       	console.log("error html = " + xhr.statusText);
         }
     });
     
-    $(document).ready(function() {
-    	getRlist();
-    });
-    
-    function getList() {
-        $.ajax({
-           url : 'tpcontroller?',
-           data : { 
-        	   tp_boardid:"${one.tp_boardid}"
-           },
-           success : function(data) {
-              console.log("댓글 불러오기")
-           }
-        });
-     }
-    
-    
+  	
+  	
 	 // Ajax 댓글작성
     $(function() {
         $("#replyWrite").on("click", function() {
@@ -125,22 +110,36 @@ A:visited {text-decoration:none; color:#646464;}
                     tp_boardid:"${one.tp_boardid}"
                 },
                 
-                success:function(data) {            // 서버에 대한 정상응답이 오면 실행, callback
-                    if(data.result == 1) {            // 쿼리 정상 완료, 결과
+                success:function(data) {            
+                	// 서버에 대한 정상응답이 오면 실행, callback
+                    if(data.result == 1) {            
+                    	// 쿼리 정상 완료, 결과
                         console.log("comment가 정상적으로 입력되었습니다.");
                         $("#replyContent").val("");
-                        showReply(data.comments, 1);
+                        $("#replyList").prepend("<div>"+data.r_content+"</div>");
+                    } else {
+                    	alert("댓글실패");
                     }
                 }
             })
         });
     });
 	 
+    
+   
 	// 글 상세 - > 목록으로(메인페이지이동) 
- 	function mainGO() {	
-	 		location.href = "tpcontroller?type=main";
- 		
+ 	function mainGo() {	
+	 	location.href = "tpcontroller?type=main";	
  	};
+ 	
+ 	function modifyGo() {
+ 		location.href = "tpcontroller?type=modify&tp_boardid=${one.tp_boardid}";
+ 	};
+ 	
+	function deleteGo() {
+		location.href = "tpcontroller?type=deleteGo";
+ 	};
+ 	
     
 </script>
 
@@ -151,14 +150,12 @@ A:visited {text-decoration:none; color:#646464;}
 <header>
  	   <label id="hit">조회수 ${one.hit }</label>
    	   <label id="updown">좋아요 ${one.b_updown }</label>
-   	   <input type="button" value="목록으로" id="mainList" onclick="mainGO();">
+   	   <input type="button" value="목록으로" id="mainList" onclick="mainGo();">
    	   <br>
  <div class="img">
    <div class="content">
        <label id="title">${one.title }</label><br>
-       <c:if test="${article.simpleReview != null}">
-       <label id="review">"${article.simpleReview}"</label>
-       </c:if>
+     >
    </div>
    <div class="img-cover">
    </div>
@@ -204,8 +201,10 @@ A:visited {text-decoration:none; color:#646464;}
       <div align="right">
         <c:if test="${article.post_id == userInfo.id}">
           <br>
-           <button id="modifyBtn" class="btn btn-outline-secondary" data-post_no="${article.post_no}">글수정</button>
-           <button id="deleteBtn" class="btn btn-outline-secondary" data-post_no="${article.post_no}">글삭제</button>
+           <button id="modifyBtn" class="btn btn-outline-secondary" data-post_no="${one.tp_boardid}"
+           onclick="modifyGo();">글수정</button>
+           <button id="deleteBtn" class="btn btn-outline-secondary" data-post_no="${one.tp_boardid}"
+           onclick="deleteGo();">글삭제</button>
         <br><br>
         </c:if>
         </div>   
@@ -213,59 +212,41 @@ A:visited {text-decoration:none; color:#646464;}
          <div>       
              <div class="border p-4">
               <div align="center">
-                    <img src="${root}/upload/profile/${article.saveFolder}/${article.save_proPicture}" class="align-self-start mb-3 rounded-circle"style="width:100px">
-                   <a href="javascript:mvMyPage('${article.post_id}');"><h4>${one.writer}</h4></a> 
+                    <img src="##" class="align-self-start mb-3 rounded-circle"style="width:100px">
+                   <a href="javascript:mvMyPage('#');"><h4>${one.writer}</h4></a> 
                 <div>
                    <p>${one.tp_name}</p>
                 </div>
                 
-                <c:if test="${followStatus.follow_no == null}">
-                   <button id="followBtn" onclick="javascript:follow('${article.post_id}');"  class="btn btn-outline-secondary"  style="height:40px;">구독하기</button> 
+                <c:if test="#">
+                   <button id="followBtn" onclick="javascript:follow('$#');"  class="btn btn-outline-secondary"  style="height:40px;">구독하기</button> 
                 </c:if>
-                 <c:if test="${followStatus.follow_no != null}">
-                   <button id="cancelFollowBtn" onclick="javascript:cancelFollow('${article.post_id}');"  class="btn btn-secondary"  style="height:40px;">구독중</button> 
+                 <c:if test="#">
+                   <button id="cancelFollowBtn" onclick="javascript:cancelFollow('$#');"  class="btn btn-secondary"  style="height:40px;">구독중</button> 
                 </c:if>
                 <button id="mvWriterPage" class="btn btn-outline-secondary" onclick="javascript:mvWriterPage('${article.post_id}');" style="height:40px;">프로필보기</button>
                 
-                <!--- 후원하기 
-                <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#myModal1">후원하기</button>
-                
-                 <div class="modal" id="myModal1">
-                   <div class="modal-dialog">
-                     <div class="modal-content">
-                       
-                       <div class="modal-header">
-                         <h4 class="modal-title">후원하기</h4>
-                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                       </div>
-                       
-                      
-                       <div class="modal-body">
-                        ${article.nickname} 님<br>
-                        <input type="text" id ="pay">원
-                        </div>
-                    
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-danger" data-dismiss="modal" id="goPay">KakaoPay결제</button>
-                          <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-                       </div>
-                     </div>
-                    </div>
-                   </div>
-                    -->  
+         
                 </div>  <!-- <div align="center"> -->
               </div> <!--<div class="border p-4">-->
             <hr/>
         
          <h2>댓글라인</h2>
+     	 <ul id="replyList">
+     	 </ul>
          <c:forEach var="rvo" items="${rlist }">
          	<table class='table table-striped table-bordered' style= 'margin-top: 10px;'>
 			 	<tbody>
 			   		<tr align='center'>
-			  			<td> ${rvo.tp_replyid} </td>
 			  			<td> ${rvo.r_writer } </td>
 			 			<td> ${rvo.r_content } </td>
 			   			<td> ${rvo.r_regdate } </td>
+			   			<td>
+			   				<c:if test="${rvo.r_writer == rvo.r_writer}">
+			   				<input type="button"  value="수정" id="replyModify">
+			   				<input type="button"  value="삭제" id="replyDelete">
+			   				</c:if>
+			   			</td>
 			  		</tr>
 			 	</tbody>
 			 </table>	
@@ -280,8 +261,8 @@ A:visited {text-decoration:none; color:#646464;}
 	    		<textarea class="form-control" rows="3" id="replyContent" placeholder="댓글을 입력하세요." style="width: 100%;" ></textarea>
 	    		<div class="btn-group btn-group-sm" role="group" aria-label="...">
 	            <input type="button" class="btn btn-default" value="댓글 쓰기" id="replyWrite">
-				<input type="button" class="btn btn-default" value="댓글 읽기(${article.commentCount})" 
-                onclick="getComment(1, event)" id="commentRead">
+				
+               
 	    	</div>
 		</div>
  

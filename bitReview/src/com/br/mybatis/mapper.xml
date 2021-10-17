@@ -40,20 +40,37 @@
 	<insert id="insert" parameterType="bVO">
 		INSERT INTO BOARD 
 				(TP_BOARDID, WRITER, TITLE, B_CONTENT, B_REGDATE,
-				 HIT, B_UPDOWN, TP_ID, MEMBER_ID, F_ID,
+				 HIT, B_UPDOWN, TP_ID, F_ID,
 				 F_NAME, F_PATH)
 		VALUES 
 				(BOARD_SEQ.NEXTVAL, #{writer}, #{title}, #{b_content}, SYSDATE,
-				0, 0, 2, 2, TPFILE_SEQ.nextval,
+				0, 0, 2, FILE_SEQ.nextval,
 				 #{f_name}, #{f_path})
-
 	</insert>
 	
 	<!-- 글 전체 목록 불러오기 -->
-	<select id="list" resultType="bVO">
+	<select id="list" resultType="bVO" parameterType="String">
 		SELECT B.*, T.TP_NAME
 		FROM BOARD B, TVPROGRAM T
-		WHERE B.TP_ID = T.TP_ID
+		WHERE 1 = 1
+		<choose>
+			<when test="idx == 0">
+				AND B.TP_ID = T.TP_ID
+				ORDER BY TP_BOARDID
+			</when>
+			<when test="idx == 1">
+				AND B.TP_ID = T.TP_ID
+				ORDER BY HIT DESC
+			</when>
+			<when test="idx == 2">
+				AND B.TP_ID = T.TP_ID
+				ORDER BY B_UPDOWN DESC
+			</when>
+			<when test="idx == 3">
+				AND B.TP_ID = T.TP_ID
+				ORDER BY B_REGDATE DESC
+			</when>
+		</choose>
 	</select>
 	
 	<!-- 글 상세보기 -->
@@ -63,6 +80,27 @@
 		WHERE t.tp_id = b.tp_id AND TP_BOARDID = #{tp_boardid}
 
 	</select>
+	
+	<!-- 글 수정하기 -->
+	<update id="update" parameterType="bVO">
+	UPDATE BOARD 
+	SET
+		TITLE = #{title},
+		B_CONTENT = #{b_content},
+		UPDATEDATE = SYSDATE,
+		TP_ID = 1,
+		F_NAME = #{f_name},
+		F_PATH = #{f_path}
+	WHERE TP_BOARDID = #{tp_boardid}
+	</update>
+	
+	<!--  조회수 올리기 -->
+	<update id="viewcnt" parameterType="int">
+	UPDATE BOARD 
+	SET
+		HIT = HIT + 1
+	WHERE TP_BOARDID = #{tp_boardid}
+	</update>
 	
 	<!-- 댓글 작성하기 -->
 	<insert id="replyInsert" parameterType="rVO">		
@@ -76,12 +114,12 @@
 		FROM REPLY
 		WHERE TP_BOARDID = #{tp_boardid}
 	</select>
+	
+	<!-- tv프로그램 목록 가져오기 -->
+	<select id="tplist" resultType="tpVO">
+		SELECT TP_NAME, TP_MEMBER, TP_RATION, TP_GENRE, TP_BRDCS, TP_COUNTRY, TP_CONTENT
+		FROM TVPROGRAM 
+	</select>
 </mapper>
-
-
-
-
-
-
 
 

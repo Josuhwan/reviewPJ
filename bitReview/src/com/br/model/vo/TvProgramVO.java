@@ -53,6 +53,12 @@ public class TvProgramVO {
 	public void setTp_content(String tp_content) {
 		this.tp_content = tp_content;
 	}
+	@Override
+	public String toString() {
+		return "TvProgramVO [tp_id=" + tp_id + ", tp_name=" + tp_name + ", tp_member=" + tp_member + ", tp_genre="
+				+ tp_genre + ", tp_brdcs=" + tp_brdcs + ", tp_country=" + tp_country + ", tp_content=" + tp_content
+				+ "]";
+	}
 	
 	
 }

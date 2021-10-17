@@ -1,0 +1,22 @@
+tvpr
+
+insert into tvprogram 
+values (TVPROGRAM_SEQ.nextval, '오징어게임', '이정재, ... ', '청소년관람불가', '스릴러', '넷플릭스', '한국', '재밌는 내용...');
+
+insert into tvprogram 
+values (TVPROGRAM_SEQ.nextval, '마이네임', '한소희, ... ', '청소년관람불가', '액션', '넷플릭스', '한국', '재미없는 내용...');
+
+
+insert into tvprogram 
+values (TVPROGRAM_SEQ.nextval, '미스터션샤인', '이병헌, ... ', '15세관람가', '사극', 'tvN', '한국', '이런 저런 내용...');
+
+
+-----------------------
+
+mem
+
+INSERT INTO MEMBER
+VALUES (MEMBER_SEQ.nextval, '뽀로로', '홍길동', '010-1234-5678', 'roro@naver.com', 'roro', '1234', '990101');
+
+
+-------------------------

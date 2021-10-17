@@ -10,11 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.br.model.command.Command;
+import com.br.model.command.ListRelpyCommand;
+import com.br.model.command.ModifyCommand;
+import com.br.model.command.ModifyOkCommand;
 import com.br.model.command.RelpyInsertCommand;
-
+import com.br.model.command.TPListCommand;
 import com.br.model.command.TPMainCommand;
 import com.br.model.command.ViewCommand;
-import com.br.model.command.WriterCommand;
+import com.br.model.command.WriteCommand;
 
 
 
@@ -30,15 +33,23 @@ public class FrontControllerCommand extends HttpServlet {
 		System.out.println("> type : " + type);
 		
 		Command command = null;
-		if ("writer".equals(type)) {
-			command = new WriterCommand();
+		if ("write".equals(type)) {
+			command = new WriteCommand();
 		} else if ("view".equals(type)) {
 			command = new ViewCommand();
 		} else if ("main".equals(type)) {
 			command = new TPMainCommand();
 		} else if ("reply".equals(type)) {
 			command = new RelpyInsertCommand();
-		}
+		} else if ("modify".equals(type)) {
+			command = new ModifyCommand();
+		} else if ("modifyok".equals(type)) {
+			command = new ModifyOkCommand();
+		} else if ("listReply".equals(type)) {
+			command = new ListRelpyCommand();
+		} else if ("tplist".equals(type)) {
+			command = new TPListCommand();
+		} 
 		
 		String path = command.exec(request, response);
 		request.getRequestDispatcher(path).forward(request, response);

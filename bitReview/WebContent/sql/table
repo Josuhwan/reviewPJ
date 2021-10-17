@@ -1,49 +1,5 @@
 ﻿-- 테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
 
--- FILE Table Create SQL
-CREATE TABLE TPFILE
-(
-    file_id      NUMBER           NOT NULL, 
-    file_name    VARCHAR2(100)    NOT NULL, 
-    file_path    VARCHAR2(100)    NOT NULL, 
-     PRIMARY KEY (file_id)
-)
-/
-
-CREATE SEQUENCE FILE_SEQ
-START WITH 1
-INCREMENT BY 1;
-/
-
-CREATE OR REPLACE TRIGGER TPFILE_AI_TRG
-BEFORE INSERT ON TPFILE 
-REFERENCING NEW AS NEW FOR EACH ROW 
-BEGIN 
-    SELECT FILE_SEQ.NEXTVAL
-    INTO :NEW.file_id
-    FROM DUAL;
-END;
-/
-
---DROP TRIGGER FILE_AI_TRG;
-/
-
---DROP SEQUENCE FILE_SEQ;
-/
-
-COMMENT ON TABLE TPFILE IS '파일저장'
-/
-
-COMMENT ON COLUMN TPFILE.file_id IS '파일ID'
-/
-
-COMMENT ON COLUMN TPFILE.file_name IS '파일이름'
-/
-
-COMMENT ON COLUMN TPFILE.file_path IS '파일경로'
-/
-
-
 -- TvProgram Table Create SQL
 CREATE TABLE TvProgram
 (
@@ -51,9 +7,9 @@ CREATE TABLE TvProgram
     tp_name       VARCHAR2(100)    NOT NULL, 
     tp_member     VARCHAR2(200)    NULL, 
     tp_ration     NUMBER       NULL, 
-    tp_genre      VARCHAR2(20)     NOT NULL, 
-    tp_brdcs      VARCHAR2(20)     NOT NULL, 
-    tp_country    VARCHAR2(20)     NOT NULL, 
+    tp_genre      VARCHAR2(50)     NOT NULL, 
+    tp_brdcs      VARCHAR2(50)     NOT NULL, 
+    tp_country    VARCHAR2(50)     NOT NULL, 
     tp_content    VARCHAR2(500)    NULL, 
      PRIMARY KEY (tp_id)
 )
@@ -64,16 +20,6 @@ CREATE TABLE TvProgram
 CREATE SEQUENCE TvProgram_SEQ
 START WITH 1
 INCREMENT BY 1;
-/
-
-CREATE OR REPLACE TRIGGER TvProgram_AI_TRG
-BEFORE INSERT ON TvProgram 
-REFERENCING NEW AS NEW FOR EACH ROW 
-BEGIN 
-    SELECT TvProgram_SEQ.NEXTVAL
-    INTO :NEW.tp_id
-    FROM DUAL;
-END;
 /
 
 --DROP TRIGGER TvProgram_AI_TRG;
@@ -113,7 +59,7 @@ COMMENT ON COLUMN TvProgram.tp_content IS 'TP내용'
 -- BOARD Table Create SQL
 CREATE TABLE BOARD
 (
-    board_id      NUMBER            NOT NULL, 
+    tp_boardid      NUMBER            NOT NULL, 
     writer        VARCHAR2(30)      NOT NULL, 
     title         VARCHAR2(100)     NOT NULL, 
     b_content     VARCHAR2(1000)    NOT NULL, 
@@ -123,8 +69,10 @@ CREATE TABLE BOARD
     hit           NUMBER            NOT NULL, 
     b_updown      NUMBER            NOT NULL, 
     tp_id       number     NOT NULL, 
-    file_id         NUMBER            NOT NULL, 
-     PRIMARY KEY (board_id)
+    f_id      NUMBER           NOT NULL, 
+    f_name    VARCHAR2(100)    NOT NULL, 
+    f_path    VARCHAR2(100)    NOT NULL, 
+     PRIMARY KEY (tp_boardid)
 )
 /
 
@@ -133,14 +81,9 @@ START WITH 1
 INCREMENT BY 1;
 /
 
-CREATE OR REPLACE TRIGGER BOARD_AI_TRG
-BEFORE INSERT ON BOARD 
-REFERENCING NEW AS NEW FOR EACH ROW 
-BEGIN 
-    SELECT BOARD_SEQ.NEXTVAL
-    INTO :NEW.board_id
-    FROM DUAL;
-END;
+CREATE SEQUENCE FILE_SEQ
+START WITH 1
+INCREMENT BY 1;
 /
 
 --DROP TRIGGER BOARD_AI_TRG;
@@ -149,15 +92,6 @@ END;
 --DROP SEQUENCE BOARD_SEQ;
 /
 
-CREATE OR REPLACE TRIGGER BOARD_AI_TRG
-BEFORE INSERT ON BOARD 
-REFERENCING NEW AS NEW FOR EACH ROW 
-BEGIN 
-    SELECT BOARD_SEQ.NEXTVAL
-    INTO :NEW.FILE_id
-    FROM DUAL;
-END;
-/
 
 --DROP TRIGGER BOARD_AI_TRG;
 /
@@ -168,7 +102,7 @@ END;
 COMMENT ON TABLE BOARD IS '게시판'
 /
 
-COMMENT ON COLUMN BOARD.board_id IS '게시글ID'
+COMMENT ON COLUMN BOARD.tp_boardid IS '게시글ID'
 /
 
 COMMENT ON COLUMN BOARD.writer IS '작성자'
@@ -198,7 +132,7 @@ COMMENT ON COLUMN BOARD.b_updown IS '좋아요'
 COMMENT ON COLUMN BOARD.tp_name IS 'TP이름'
 /
 
-COMMENT ON COLUMN BOARD.tp_id IS '파일ID'
+COMMENT ON COLUMN BOARD.f_id IS '파일ID'
 /
 
 ALTER TABLE BOARD
@@ -206,22 +140,19 @@ ALTER TABLE BOARD
         REFERENCES TvProgram (tp_id)
 /
 
-ALTER TABLE BOARD
-    ADD CONSTRAINT FK_BOARD_file_id_TPFILE_file_i FOREIGN KEY (file_id)
-        REFERENCES TPFILE (file_id)
-/
+
 
 
 -- REPLY Table Create SQL
 CREATE TABLE REPLY
 (
-    board_id     NUMBER           NOT NULL, 
-    reply_id     NUMBER           NOT NULL, 
+    tp_boardid     NUMBER           NOT NULL, 
+    tp_replyid     NUMBER           NOT NULL, 
     r_writer     VARCHAR2(50)     NOT NULL, 
     r_content    VARCHAR2(200)    NOT NULL, 
     r_regdate    DATE             NOT NULL, 
     r_updown     NUMBER           NOT NULL, 
-     PRIMARY KEY (reply_id)
+     PRIMARY KEY (tp_replyid)
 )
 /
 
@@ -230,15 +161,6 @@ START WITH 1
 INCREMENT BY 1;
 /
 
-CREATE OR REPLACE TRIGGER REPLY_AI_TRG
-BEFORE INSERT ON REPLY 
-REFERENCING NEW AS NEW FOR EACH ROW 
-BEGIN 
-    SELECT REPLY_SEQ.NEXTVAL
-    INTO :NEW.reply_id
-    FROM DUAL;
-END;
-/
 
 --DROP TRIGGER REPLY_AI_TRG;
 /
@@ -249,10 +171,10 @@ END;
 COMMENT ON TABLE REPLY IS '댓글'
 /
 
-COMMENT ON COLUMN REPLY.board_id IS '게시글ID'
+COMMENT ON COLUMN REPLY.tp_boardid IS '게시글ID'
 /
 
-COMMENT ON COLUMN REPLY.reply_id IS '댓글ID'
+COMMENT ON COLUMN REPLY.tp_replyid IS '댓글ID'
 /
 
 COMMENT ON COLUMN REPLY.r_writer IS '작성자'
@@ -268,7 +190,7 @@ COMMENT ON COLUMN REPLY.r_updown IS '댓글좋아요'
 /
 
 ALTER TABLE REPLY
-    ADD CONSTRAINT FK_REPLY_board_id_BOARD_board_ FOREIGN KEY (board_id)
-        REFERENCES BOARD (board_id)
+    ADD CONSTRAINT FK_REPLY FOREIGN KEY (tp_boardid)
+        REFERENCES BOARD (tp_boardid)
 /
 

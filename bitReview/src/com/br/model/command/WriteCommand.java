@@ -14,7 +14,7 @@ import com.br.model.vo.BoardVO;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
-public class WriterCommand implements Command {
+public class WriteCommand implements Command {
 
 	@Override
 	public String exec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,7 +32,11 @@ public class WriterCommand implements Command {
 		String writer = mr.getParameter("writer");
 		String title = mr.getParameter("title");
 		String b_content = mr.getParameter("b_content");
-	
+		
+		String idx = request.getParameter("idx");
+		if (idx == null) {
+			idx = "0";
+		}
 		
 		//2. 가져온 값 vo에 저장"
 		BoardVO bvo = new BoardVO();
@@ -49,7 +53,7 @@ public class WriterCommand implements Command {
 		
 		
 		//3. DB연결하고 데이터 가져오기
-		List<BoardVO> list = BoardDAO.getList();
+		List<BoardVO> list = BoardDAO.getList(idx);
 		
 		//4. 응답페이지(TPmain.jsp)로 데이터 전달
 		request.setAttribute("list", list);

@@ -81,3 +81,75 @@ SELECT B.*, T.TP_NAME
 FROM BOARD B, TVPROGRAM T
 WHERE B.TP_ID = T.TP_ID;
         
+SELECT TP_NAME, TP_MEMBER, TP_RATION, TP_GENRE, TP_BRDCS, TP_COUNTRY, TP_CONTENT
+FROM TVPROGRAM;
+
+/*
+DROP TABLE BOARD;
+DROP TABLE REPLY;
+DROP TABLE TPFILE;
+DROP TABLE TVPROGRAM;
+*/
+
+DELETE board 
+WHERE tp_boardid = 2;
+
+insert into tvprogram 
+values (TVPROGRAM_SEQ.nextval, '오징어게임', '이정재, ... ', '청소년관람불가', '스릴러', '넷플릭스', '한국', '재밌는 내용...');
+
+insert into tvprogram 
+values (TVPROGRAM_SEQ.nextval, '마이네임', '한소희, ... ', '청소년관람불가', '액션', '넷플릭스', '한국', '재미없는 내용...');
+
+insert into tvprogram 
+values (TVPROGRAM_SEQ.nextval, '미스터션샤인', '이병헌, ... ', '15세관람가', '사극', 'tvN', '한국', '이런 저런 내용...');
+
+SELECT * FROM TVPROGRAM;
+SELECT * FROM MEMBER;
+SELECT * FROM BOARD;
+SELECT * FROM REPLY;
+
+INSERT INTO MEMBER
+VALUES (MEMBER_SEQ.nextval, '뽀로로', '홍길동', '010-1234-5678', 'roro@naver.com', 'roro', '1234', '990101');
+
+UPDATE BOARD 
+SET
+TITLE = '이러다 다죽어!!!!',
+B_CONTENT = '그만해!!!!!!!!',
+UPDATEDATE = SYSDATE
+WHERE TP_BOARDID = 2; 
+
+COMMIT;
+
+
+SELECT TP_NAME, TP_MEMBER, TP_RATION, TP_GENRE, TP_BRDCS, TP_COUNTRY, TP_CONTENT
+FROM TVPROGRAM;
+
+SELECT B.*, T.TP_NAME
+FROM BOARD B, TVPROGRAM T
+WHERE B.TP_ID = T.TP_ID
+ORDER BY TP_BOARDID;
+
+SELECT B.*, T.TP_NAME
+FROM BOARD B, TVPROGRAM T
+WHERE 1=1
+AND
+B.TP_ID = T.TP_ID
+ORDER BY TP_BOARDID;
+
+SELECT B.*, T.TP_NAME
+FROM BOARD B, TVPROGRAM T
+WHERE 1=1
+AND
+B.TP_ID = T.TP_ID
+ORDER BY HIT;
+
+SELECT B.*, T.TP_NAME
+FROM BOARD B, TVPROGRAM T
+WHERE 1=1
+AND
+B.TP_ID = T.TP_ID
+ORDER BY B_REGDATE;
+
+
+
+        

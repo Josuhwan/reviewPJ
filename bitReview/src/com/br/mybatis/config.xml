@@ -11,6 +11,7 @@
 	<typeAliases>
 		<typeAlias type="com.br.model.vo.BoardVO" alias="bVO"/>
 		<typeAlias type="com.br.model.vo.ReplyVO" alias="rVO"/>
+		<typeAlias type="com.br.model.vo.TvProgramVO" alias="tpVO"/>
 	</typeAliases>
 	
   <environments default="development">

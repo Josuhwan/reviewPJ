@@ -15,8 +15,15 @@ public class TPMainCommand implements Command {
 	@Override
 	public String exec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		String idx = request.getParameter("idx");
+		System.out.println(idx + " 값");
+		
+		if (idx == null) {
+			idx = "0";
+		}
+		System.out.println(idx + " 값좀주세요");
 		//1. 디비연결하고 데이터 가져오기 
-		List<BoardVO> list = BoardDAO.getList();
+		List<BoardVO> list = BoardDAO.getList(idx);
 		System.out.println("list" + list);
 		//2. 응답페이지(TPview.jsp)에 데이터 전달
 		request.setAttribute("list", list);

@@ -21,10 +21,12 @@ public class BoardDAO {
 	}
 	
 	// 메인페이지 글 목록 보여주기
-	public static List<BoardVO> getList() {
+	public static List<BoardVO> getList(String idx) {
+		System.out.println(idx + " 값이있나");
 		SqlSession ss = DBService.getFactory().openSession();
-		List<BoardVO> list = ss.selectList("br.list");
-	
+		System.out.println("111문제");
+		List<BoardVO> list = ss.selectList("br.list", idx);
+		System.out.println("222문제");
 		ss.close();
 		
 		return list;
@@ -39,23 +41,23 @@ public class BoardDAO {
 		return one;
 	}
 	
-	// 댓글 쓰기
-	public static int replyInsert(ReplyVO rvo) {
+	// 글 수정
+	public static int update(BoardVO bvo) {
 		SqlSession ss = DBService.getFactory().openSession(true);
-		int result = ss.insert("br.replyInsert", rvo);
+		int result = ss.update("br.update", bvo);
 		ss.close();
 		
 		return result;
-
 	}
-	// 댓글목록 가져오기
-	public static List<ReplyVO> replyList(int tp_boardid) {
-		System.out.println(tp_boardid + "id");
-		SqlSession ss = DBService.getFactory().openSession();
-		List<ReplyVO> rlist = ss.selectList("br.rlist", tp_boardid);
-		System.out.println(rlist.toString());
+	
+	// 조회수 증가
+	public static int updateViewCnt(int tp_boardid) {
+		SqlSession ss = DBService.getFactory().openSession(true);
+		int result = ss.update("br.viewcnt", tp_boardid);
 		ss.close();
 		
-		return rlist;
+		return result;
 	}
+	
+	
 }
