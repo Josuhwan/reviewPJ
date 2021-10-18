@@ -28,12 +28,16 @@ public class WriteCommand implements Command {
 		MultipartRequest mr = new MultipartRequest(request, f_path, 10 * 1024 * 1024, "UTF-8");
 		
 		String f_name = mr.getOriginalFileName("tpfile");
-		System.out.println(f_name +"파일네임");
 		String writer = mr.getParameter("writer");
 		String title = mr.getParameter("title");
 		String b_content = mr.getParameter("b_content");
+		System.out.println("ddddddddddddd");
+		int tp_id = Integer.parseInt(mr.getParameter("tpid"));
+		System.out.println("222 dd " + tp_id);
 		
 		String idx = request.getParameter("idx");
+		
+		
 		if (idx == null) {
 			idx = "0";
 		}
@@ -43,7 +47,7 @@ public class WriteCommand implements Command {
 		bvo.setTitle(title);
 		bvo.setB_content(b_content);
 		bvo.setWriter(writer);
-//		bvo.setTp_id(2);
+		bvo.setTp_id(tp_id);
 		bvo.setF_name(f_name);
 		bvo.setF_path(f_path);
 		

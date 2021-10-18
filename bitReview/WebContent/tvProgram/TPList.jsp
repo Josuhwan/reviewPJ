@@ -6,8 +6,36 @@
 <head>
 <meta charset="UTF-8">
 <title>프로그램선택창</title>
+<style>
+	#bbs table {
+		width: 1100px;
+		margin-left: 10px;
+		border-collapse: collapse;
+		font-size: 14px;
+	}
+	#bbs table caption {
+		font-size: 20px;
+		font-weight: bold;
+		margin-bottom: 10px;
+	}
+	#bbs th, #bbs td {
+		text-align: center;
+		border: 1px solid black;
+		padding: 4px 10px;
+	}
+	#bbs .align-left { text-align: left; }
+	
+	.title { background-color: lightsteelblue; }
+	
+	.name { width: 30%; }
+	.genre { width: 15%; }
+	.brdcs { width: 15%; }
+	.member { width: 40%; }
+	
+</style>	
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+/*
 	$(document).ready(function(){
 		$("#getTPBtn").click(getTPList);
 	});
@@ -49,20 +77,51 @@
 					+ "errorThrown : " + errorThrown);
 			}
 		});
-	
 }
+*/
+
+
+function getTPList() {
+	location.href = "../tpcontroller?type=tplist";
+}
+
+function sendChildValue(name, id) {
+	
+	opener.setChildValue(name, id);
+	window.close();
+}
+
 </script>
 
 </head>
 <body>
 	<h2>프로그램선택</h2>
-	<button id="getTPBtn">프로그램 선택</button>
+	<button id="getTPBtn" onclick="getTPList()">프로그램 목록보기</button>
 	<hr>
-	<table border>
-		<tbody>	
-		</tbody>
-	</table>
+	<table>
+		<thead>
+		<tr class="title">
+			<th class="name">프로그램명</th>
+			<th class="genre">장르</th>
+			<th class="brdcs">방송사</th>
+			<th class="member">출연진</th>
+		</tr>
+		</thead>
+		<tbody>
+		<c:forEach var="tvo" items="${tplist }">
+		<tr>
+			<td id="name" >${tvo.tp_name}</td>
+			<td>${tvo.tp_genre}</td>
+			<td>${tvo.tp_brdcs}</td>
+			<td>${tvo.tp_member}</td>
+			<th>${tvo.tp_id}</th>
+			<td><input type=button value="선택"  onclick="sendChildValue('${tvo.tp_name}','${tvo.tp_id}')"></td>
+		
+		</tr>
+		</c:forEach>		
+		</tbody>	
+	</table>		
+	
 	<hr>
-
 </body>
 </html>

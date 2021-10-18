@@ -17,6 +17,9 @@ public class BoardVO {
 	private String f_name;
 	private String f_path;
 	private String tp_name;
+	private String open;
+	
+	
 	
 //	private ReplyVO replyvo;
 	
@@ -156,13 +159,6 @@ public class BoardVO {
 		this.b_updown = b_updown;
 	}
 
-	@Override
-	public String toString() {
-		return "BoardVO [board_id=" + tp_boardid + ", writer=" + writer + ", title=" + title + ", b_content=" + b_content
-				+ ", b_regdate=" + b_regdate + ", updatedate=" + updatedate + ", deletedate=" + deletedate + ", hit="
-				+ hit + ", tp_id=" + tp_id + ", b_updown=" + b_updown + ", f_id=" + f_id + ", f_name=" + f_name
-				+ ", f_path=" + f_path +  "]";
-	}
 
 	public String getTp_name() {
 		return tp_name;
@@ -170,6 +166,22 @@ public class BoardVO {
 
 	public void setTp_name(String tp_name) {
 		this.tp_name = tp_name;
+	}
+
+	public String getOpen() {
+		return open;
+	}
+
+	public void setOpen(String open) {
+		this.open = open;
+	}
+
+	@Override
+	public String toString() {
+		return "BoardVO [tp_boardid=" + tp_boardid + ", writer=" + writer + ", title=" + title + ", b_content="
+				+ b_content + ", b_regdate=" + b_regdate + ", updatedate=" + updatedate + ", deletedate=" + deletedate
+				+ ", hit=" + hit + ", tp_id=" + tp_id + ", b_updown=" + b_updown + ", f_id=" + f_id + ", f_name="
+				+ f_name + ", f_path=" + f_path + ", tp_name=" + tp_name + ", open=" + open + "]";
 	}
 
 	

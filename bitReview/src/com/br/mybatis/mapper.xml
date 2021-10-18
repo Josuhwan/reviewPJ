@@ -44,7 +44,7 @@
 				 F_NAME, F_PATH)
 		VALUES 
 				(BOARD_SEQ.NEXTVAL, #{writer}, #{title}, #{b_content}, SYSDATE,
-				0, 0, 2, FILE_SEQ.nextval,
+				0, 0, #{tp_id}, FILE_SEQ.nextval,
 				 #{f_name}, #{f_path})
 	</insert>
 	
@@ -94,13 +94,7 @@
 	WHERE TP_BOARDID = #{tp_boardid}
 	</update>
 	
-	<!--  조회수 올리기 -->
-	<update id="viewcnt" parameterType="int">
-	UPDATE BOARD 
-	SET
-		HIT = HIT + 1
-	WHERE TP_BOARDID = #{tp_boardid}
-	</update>
+	
 	
 	<!-- 댓글 작성하기 -->
 	<insert id="replyInsert" parameterType="rVO">		
@@ -117,9 +111,25 @@
 	
 	<!-- tv프로그램 목록 가져오기 -->
 	<select id="tplist" resultType="tpVO">
-		SELECT TP_NAME, TP_MEMBER, TP_RATION, TP_GENRE, TP_BRDCS, TP_COUNTRY, TP_CONTENT
+		SELECT TP_ID, TP_NAME, TP_MEMBER, TP_RATION, TP_GENRE, TP_BRDCS, TP_COUNTRY, TP_CONTENT
 		FROM TVPROGRAM 
 	</select>
+	
+	<!--  조회수 올리기 -->
+	<update id="viewcnt" parameterType="int">
+		UPDATE BOARD 
+		SET
+			HIT = HIT + 1
+		WHERE TP_BOARDID = #{tp_boardid}
+	</update>
+	
+	<!-- 글 삭제하기(안보이게만 처리) -->
+	<update id="delete" parameterType="int">
+		UPDATE BOARD
+		SET
+		OPEN = 1
+		WHERE TP_BOARDID = #{tp_boardid}
+	</update>
 </mapper>
 
 

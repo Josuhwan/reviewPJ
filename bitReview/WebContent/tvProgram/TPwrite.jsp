@@ -43,7 +43,7 @@
 		});
 		
 		$('#summernote').summernote({
-			placeholder: '최대 500자 작성 가능합니다.',
+			placeholder: '최대 300자 작성 가능합니다.',
 	        height: 500,
 	        lang: 'ko-KR',
 	        callbacks: {
@@ -60,11 +60,21 @@
 	function tpList() {
 		window.name ="TPwrite.jsp"
 		
-		window.open("TPList.jsp", "tplist", "width = 500, height = 800, resizable = no, scrollbars = no, status = no");
+		window.open("TPList.jsp", "tplist", "width = 1100, height = 500, resizable = no, scrollbars = no, status = no");
 	}
+	
+	function setChildValue(name, id) {
+
+		document.getElementById("tp").value = name;
+		document.getElementById("tpid").value = id;
+	}
+	
+	function cancel() {
+		location.href = "../tpcontroller?type=main";
+	}
+	
 </script>
 <body>
-
 <div class="content">
 	<div class ="wrap">
 	<form action="" id="writeForm"  method="post" enctype="multipart/form-data">
@@ -75,7 +85,8 @@
 	    	<span><input type="file" name= tpfile id ="file"></span>	    
 	    </div>
 	    <div>
-	    	<input type="text" id="tp" name="tpid" placeholder="tp 선택"> 
+	    	<input type="text" id="tp" name="tpname" placeholder="tp 선택">
+	    	<input type="hidden" id="tpid" name="tpid" value="tpid">  
 	    	<button type="button"  onclick="tpList()" >TV프로등록</button>
 	    </div>
 	    <div>
@@ -87,9 +98,16 @@
 	<br>
 	
 	<button type="submit" id="writeBtn" >글쓰기</button>
-	<button type="button" >취소</button>
+	<button type="button" id="cancel" onclick="cancel()" >취소</button>
 	</div>
 </div>
-
+<input type="hidden" id="tpList" value="
+<c:forEach var="tvo" items="${tplist }">
+				<div>${tvo.tp_name}</div>
+				<div>${tvo.tp_member}</div>
+				<div>${tvo.tp_genre}</div>
+				<div>${tvo.tp_brdcs}</div>
+</c:forEach>
+">
 </body>
 </html>

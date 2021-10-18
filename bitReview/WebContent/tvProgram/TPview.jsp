@@ -8,18 +8,11 @@
 <html>
 <head>
 <style>
- a:link { color: black; text-decoration: none;}
- a:visited { color: black; text-decoration: none;}
- a:hover { color: black; text-decoration: underline;}
 
 #title, #nickname{
    font-family: 'Nanum Myeongjo', serif;
 }
-#review{
-   font-family: 'Nanum Myeongjo', serif;
-   font-size:3rem;
-   color:darkgray;
-}
+
 .media{
     border-top-style: none;
     border-right-style: none;
@@ -28,22 +21,13 @@
     border-width: 1px;
     border-color: lightgray;
 }
-.media:hover{
-   background-color: #f2f2f2;
-}
-
-A:visited {text-decoration:none; color:#646464;}
 
 @media (min-width: 768px) {
   .container {
     width: 800px;
   }
 }
-@media (min-width: 992px) {
-  .container {
-    width: 880px;
-  }
-}
+
 .img{
     position: relative;
     background-image: url("##");                                                               
@@ -79,39 +63,69 @@ A:visited {text-decoration:none; color:#646464;}
      z-index: 2;
      text-align: center;
 }
-#postedImg{
-   text-align:center;
-}
+
 </style>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
-    $.ajaxSetup({
-       async:true,
-       dataType:"json",
-       error:function(xhr) {
-       	console.log("error html = " + xhr.statusText);
-        }
-    });
     
+    $(document).ready(function(){
+    	getReplyList();
+    });
   	
+    function getReplyList() { 	
+    	$.ajax({
+    		url: "replyList",
+    		type: "get",
+    		dataType:"json",
+    		data:{
+    			tp_boardid:"${one.tp_boardid}"
+    		}, success: function(data){
+    				alert("성공좀하자");
+
+    				alert(data);
+					var tbody ="";
+					var alist = data.rlist;
+					
+					alert(alist + "왜 안뜨는겨 ");
+					$.each(alist, function(index, reply){
+						alert(this.r_writer + " 뭐좀 넘어와라 ")
+						tbody += "<tr align='center'>";
+						tbody += "<td>" + this.r_writer + "</td>";
+						tbody += "<td>" + this.r_content + "</td>";
+						tbody += "<td>" + this.r_regdate + "</td>";
+						tbody += "</tr>";
+						
+					});
+					$("#tbody").html(tbody);
+					
+    			}, 
+    			error : function(jqXHR, textStatus, errorThrown){
+        			alert("실패실패실패");
+        			alert(jqXHR +" 11 " + textStatus + " 22 " + errorThrown);
+    				
+    			}
+    			
+    	});
+	}
   	
 	 // Ajax 댓글작성
-    $(function() {
-        $("#replyWrite").on("click", function() {
+    	
+        function writerReply() {
+        	alert("이건뜨나");
         	let r_content = $("#replyContent").val();
             $.ajax({
                 url:"tpcontroller?type=reply",
-                type:"post",		
+                type:"post",
+                dataType:"json",
                 data:{
                 	r_content:$("#replyContent").val(),
                     tp_boardid:"${one.tp_boardid}"
                 },
-                
-                success:function(data) {            
-                	// 서버에 대한 정상응답이 오면 실행, callback
+                success:function(data) {
+                	alert("댓글성공");
                     if(data.result == 1) {            
                     	// 쿼리 정상 완료, 결과
                         console.log("comment가 정상적으로 입력되었습니다.");
@@ -121,10 +135,8 @@ A:visited {text-decoration:none; color:#646464;}
                     	alert("댓글실패");
                     }
                 }
-            })
-        });
-    });
-	 
+            });
+    }	 
     
    
 	// 글 상세 - > 목록으로(메인페이지이동) 
@@ -137,7 +149,11 @@ A:visited {text-decoration:none; color:#646464;}
  	};
  	
 	function deleteGo() {
-		location.href = "tpcontroller?type=deleteGo";
+		 if (confirm("정말 삭제하시겠습니까??") == true){    //확인
+			 location.href = "tpcontroller?type=delete&&tp_boardid=${one.tp_boardid}";
+		 }else{
+		     return false;
+		 }
  	};
  	
     
@@ -234,23 +250,19 @@ A:visited {text-decoration:none; color:#646464;}
          <h2>댓글라인</h2>
      	 <ul id="replyList">
      	 </ul>
-         <c:forEach var="rvo" items="${rlist }">
+         
          	<table class='table table-striped table-bordered' style= 'margin-top: 10px;'>
-			 	<tbody>
+			 	<tbody id="tbody">
 			   		<tr align='center'>
-			  			<td> ${rvo.r_writer } </td>
-			 			<td> ${rvo.r_content } </td>
-			   			<td> ${rvo.r_regdate } </td>
-			   			<td>
+			  			
 			   				<c:if test="${rvo.r_writer == rvo.r_writer}">
 			   				<input type="button"  value="수정" id="replyModify">
 			   				<input type="button"  value="삭제" id="replyDelete">
 			   				</c:if>
-			   			</td>
 			  		</tr>
 			 	</tbody>
 			 </table>	
-         </c:forEach>
+      
          		<!-- 댓글 라인 -->
 	         <div class="input-group" role="group" aria-label="..." style="margin-top: 10px; width: 100%;">
     			<div id="showComment" style="text-align: center;"></div>
@@ -260,7 +272,7 @@ A:visited {text-decoration:none; color:#646464;}
 	         <div class="input-group" role="group" aria-label="..." style="margin-top: 10px; width: 100%;">
 	    		<textarea class="form-control" rows="3" id="replyContent" placeholder="댓글을 입력하세요." style="width: 100%;" ></textarea>
 	    		<div class="btn-group btn-group-sm" role="group" aria-label="...">
-	            <input type="button" class="btn btn-default" value="댓글 쓰기" id="replyWrite">
+	            <input type="button" class="btn btn-default" value="댓글 쓰기" id="replyWrite" onclick="writerReply()">
 				
                
 	    	</div>

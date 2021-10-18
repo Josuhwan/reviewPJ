@@ -11,9 +11,7 @@ import com.br.mybatis.DBService;
 public class BoardDAO {
 	
 	// 글 작성
-	public static int insert(BoardVO bvo) {
-		System.out.println("여기일단 오고");
-		
+	public static int insert(BoardVO bvo) {	
 		SqlSession ss = DBService.getFactory().openSession(true);
 		int result = ss.insert("br.insert", bvo);
 		ss.close();
@@ -22,11 +20,8 @@ public class BoardDAO {
 	
 	// 메인페이지 글 목록 보여주기
 	public static List<BoardVO> getList(String idx) {
-		System.out.println(idx + " 값이있나");
 		SqlSession ss = DBService.getFactory().openSession();
-		System.out.println("111문제");
 		List<BoardVO> list = ss.selectList("br.list", idx);
-		System.out.println("222문제");
 		ss.close();
 		
 		return list;
@@ -58,6 +53,14 @@ public class BoardDAO {
 		
 		return result;
 	}
+
+	public static int delete(int tp_boardid) {
+		SqlSession ss = DBService.getFactory().openSession(true);
+		int result = ss.update("br.delete", tp_boardid);
+		ss.close();
+		
+		return result;
+	} 
 	
 	
 }

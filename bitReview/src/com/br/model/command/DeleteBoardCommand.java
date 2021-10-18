@@ -10,10 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 import com.br.model.dao.BoardDAO;
 import com.br.model.vo.BoardVO;
 
-public class TPMainCommand implements Command {
+public class DeleteBoardCommand implements Command {
 
 	@Override
 	public String exec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int tp_boardid = Integer.parseInt(request.getParameter("tp_boardid"));
+		
+		System.out.println(tp_boardid);
+		
+		BoardDAO.delete(tp_boardid);
 		
 		String idx = request.getParameter("idx");
 		System.out.println(idx + " 값");
@@ -25,11 +30,8 @@ public class TPMainCommand implements Command {
 		//1. 디비연결하고 데이터 가져오기 
 		List<BoardVO> list = BoardDAO.getList(idx);
 		System.out.println("list" + list);
-		//2. 응답페이지(TPmain.jsp)에 데이터 전달
+		//2. 응답페이지(TPview.jsp)에 데이터 전달
 		request.setAttribute("list", list);
-	
-		System.out.println(list);
-		//3. 응답페이지(TPmain.jsp)로 화면 이동(전환)
 		return "tvProgram/TPmain.jsp";
 	}
 

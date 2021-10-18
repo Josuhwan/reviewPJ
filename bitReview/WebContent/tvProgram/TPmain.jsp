@@ -30,11 +30,13 @@ ul.liststyle li, ol.liststyle li {
 <title>메인</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 <script>
+	
+
 	function tpWriter() {
 		location.href = "tvProgram/TPwrite.jsp";
 	}
 	function orderBy() {
-		alert("여긴옵니까");
+		alert("정렬!!!");
 		$("#orderBy").attr("method", "post").attr("action","tpcontroller?type=main").submit();
 		
 	}
@@ -55,6 +57,7 @@ ul.liststyle li, ol.liststyle li {
 	</form>
 	<ul class="liststyle">
 		<c:forEach var="vo" items="${list }">
+			<c:if test="${vo.open == null }">
 			<a href="tpcontroller?type=view&tp_boardid=${vo.tp_boardid}">
 			<li>
 				<div>
@@ -66,6 +69,7 @@ ul.liststyle li, ol.liststyle li {
 				<div>좋아요 ${vo.b_updown}</div>
 			</li>
 			</a>
+			</c:if>
 		</c:forEach>
 	</ul>
 

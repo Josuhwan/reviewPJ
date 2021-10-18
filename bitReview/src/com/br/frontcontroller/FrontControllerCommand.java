@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.br.model.command.Command;
+import com.br.model.command.DeleteBoardCommand;
 import com.br.model.command.ListRelpyCommand;
 import com.br.model.command.ModifyCommand;
 import com.br.model.command.ModifyOkCommand;
@@ -45,11 +46,11 @@ public class FrontControllerCommand extends HttpServlet {
 			command = new ModifyCommand();
 		} else if ("modifyok".equals(type)) {
 			command = new ModifyOkCommand();
-		} else if ("listReply".equals(type)) {
-			command = new ListRelpyCommand();
-		} else if ("tplist".equals(type)) {
+		}  else if ("tplist".equals(type)) {
 			command = new TPListCommand();
-		} 
+		} else if ("delete".equals(type)) {
+			command = new DeleteBoardCommand();
+		}
 		
 		String path = command.exec(request, response);
 		request.getRequestDispatcher(path).forward(request, response);
