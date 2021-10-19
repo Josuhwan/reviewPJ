@@ -13,29 +13,25 @@ import javax.servlet.http.HttpServletResponse;
 import com.br.model.dao.ReplyDAO;
 import com.br.model.vo.ReplyVO;
 
-@WebServlet("/reply")
-public class RelpyInsertCommand extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+
+@WebServlet("/delete")
+public class RelpyDeleteCommand extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+   
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html:charset=UTP-8");
 		response.setCharacterEncoding("UTF-8");
-
+		System.out.println("여긴오니");
+		
+		int tp_replyid = Integer.parseInt(request.getParameter("tp_replyid"));
 		int tp_boardid = Integer.parseInt(request.getParameter("tp_boardid"));
-		String r_content = request.getParameter("r_content");
-
-		System.out.println(tp_boardid);
-
-		// 2. 가져온 값 vo에 저장"
-		ReplyVO rvo = new ReplyVO();
-
-		rvo.setTp_boardid(tp_boardid);
-		rvo.setR_content(r_content);
-		// 로그인되어 있는 멤버 rvo.setWriter();
-		rvo.setR_writer("뽀로로");
-		ReplyDAO.replyInsert(rvo);
-
+		
+		System.out.println(tp_replyid);
+		ReplyDAO.delete(tp_replyid);
+		
+		System.out.println("삭제완료??");
+		
 		List<ReplyVO> rlist = ReplyDAO.replyList(tp_boardid);
 		
 		String result = makeJson(rlist);

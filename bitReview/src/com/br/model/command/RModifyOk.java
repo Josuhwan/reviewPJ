@@ -13,19 +13,31 @@ import javax.servlet.http.HttpServletResponse;
 import com.br.model.dao.ReplyDAO;
 import com.br.model.vo.ReplyVO;
 
-
-@WebServlet("/replyList")
-public class ListRelpyCommand extends HttpServlet {
+@WebServlet("/modifyok")
+public class RModifyOk extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html:charset=UTP-8");
 		response.setCharacterEncoding("UTF-8");
 		
 		int tp_boardid = Integer.parseInt(request.getParameter("tp_boardid"));
+		int tp_replyid = Integer.parseInt(request.getParameter("tp_replyid"));
+		String r_content = request.getParameter("r_content");
 		
+		System.out.println(tp_boardid);
+		System.out.println(tp_replyid);
+		System.out.println(r_content);
+		
+		// 2. 가져온 값 vo에 저장"
+		ReplyVO rvo = new ReplyVO();
 
+		rvo.setTp_boardid(tp_replyid);
+		rvo.setR_content(r_content);
+		rvo.setTp_replyid(tp_replyid);
+		ReplyDAO.replyUpdate(rvo);
+		
+		
 		//1. 디비연결하고 데이터 가져오기
 		List<ReplyVO> rlist = ReplyDAO.replyList(tp_boardid);
 		
@@ -59,5 +71,10 @@ public class ListRelpyCommand extends HttpServlet {
 			
 			return result.toString();
 		}
-
+		
+		@Override
+		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			request.setCharacterEncoding("UTF-8");
+			doGet(request, response);
+		}	
 }

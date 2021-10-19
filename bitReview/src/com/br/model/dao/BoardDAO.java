@@ -53,7 +53,8 @@ public class BoardDAO {
 		
 		return result;
 	}
-
+	
+	// 글삭제 (안보이게만처리)
 	public static int delete(int tp_boardid) {
 		SqlSession ss = DBService.getFactory().openSession(true);
 		int result = ss.update("br.delete", tp_boardid);

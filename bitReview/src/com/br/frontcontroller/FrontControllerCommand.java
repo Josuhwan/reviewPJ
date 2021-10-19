@@ -14,7 +14,7 @@ import com.br.model.command.DeleteBoardCommand;
 import com.br.model.command.ListRelpyCommand;
 import com.br.model.command.ModifyCommand;
 import com.br.model.command.ModifyOkCommand;
-import com.br.model.command.RelpyInsertCommand;
+
 import com.br.model.command.TPListCommand;
 import com.br.model.command.TPMainCommand;
 import com.br.model.command.ViewCommand;
@@ -40,8 +40,6 @@ public class FrontControllerCommand extends HttpServlet {
 			command = new ViewCommand();
 		} else if ("main".equals(type)) {
 			command = new TPMainCommand();
-		} else if ("reply".equals(type)) {
-			command = new RelpyInsertCommand();
 		} else if ("modify".equals(type)) {
 			command = new ModifyCommand();
 		} else if ("modifyok".equals(type)) {

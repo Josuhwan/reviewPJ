@@ -107,6 +107,7 @@
 		SELECT TP_REPLYID, TP_BOARDID, R_WRITER, R_CONTENT, R_REGDATE, R_UPDOWN
 		FROM REPLY
 		WHERE TP_BOARDID = #{tp_boardid}
+		ORDER BY r_REGDATE
 	</select>
 	
 	<!-- tv프로그램 목록 가져오기 -->
@@ -123,6 +124,22 @@
 		WHERE TP_BOARDID = #{tp_boardid}
 	</update>
 	
+	
+	<!-- 댓글 수정전 불러오기 -->
+	<select id="oneReply" parameterType="int" resultType="rVO">
+		SELECT *
+		FROM REPLY
+		WHERE TP_REPLYID = #{tp_replyid}
+	</select>
+	
+	<!-- 댓글 수정 완료 -->
+	<update id="rupdate" parameterType="rVO" >
+		UPDATE REPLY
+		SET 
+		R_CONTENT = #{r_content}
+		WHERE TP_REPLYID = #{tp_replyid}
+	</update>
+		
 	<!-- 글 삭제하기(안보이게만 처리) -->
 	<update id="delete" parameterType="int">
 		UPDATE BOARD
@@ -130,6 +147,12 @@
 		OPEN = 1
 		WHERE TP_BOARDID = #{tp_boardid}
 	</update>
+
+	<!-- 댓글 삭제하기 -->
+	<delete id="deleteReply" parameterType="int">
+		DELETE REPLY
+		WHERE TP_REPLYID = #{tp_replyid}
+	</delete>
 </mapper>
 
 

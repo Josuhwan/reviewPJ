@@ -69,7 +69,7 @@
 <title>Insert title here</title>
 <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
+	var member = "뽀로로";
     
     $(document).ready(function(){
     	getReplyList();
@@ -80,22 +80,22 @@
     		url: "replyList",
     		type: "get",
     		dataType:"json",
+    		async:true,
     		data:{
     			tp_boardid:"${one.tp_boardid}"
     		}, success: function(data){
-    				alert("성공좀하자");
-
-    				alert(data);
 					var tbody ="";
 					var alist = data.rlist;
 					
-					alert(alist + "왜 안뜨는겨 ");
 					$.each(alist, function(index, reply){
-						alert(this.r_writer + " 뭐좀 넘어와라 ")
-						tbody += "<tr align='center'>";
+						tbody += "<tr align='center' data-tp_replyid='" + this.tp_replyid+ "'data-tp_boardid='" + this.tp_boardid+"' '>";
 						tbody += "<td>" + this.r_writer + "</td>";
 						tbody += "<td>" + this.r_content + "</td>";
 						tbody += "<td>" + this.r_regdate + "</td>";
+						if(this.r_writer == "뽀로로") {
+						tbody += "<td><input type='button' class='modifyReply' id='modifyReply'  value='수정'></td>"
+						tbody += "<td><input type='button' class='deleteBtn' id='deleteReply' value='삭제'></td>"
+						}
 						tbody += "</tr>";
 						
 					});
@@ -104,41 +104,99 @@
     			}, 
     			error : function(jqXHR, textStatus, errorThrown){
         			alert("실패실패실패");
-        			alert(jqXHR +" 11 " + textStatus + " 22 " + errorThrown);
     				
     			}
-    			
     	});
 	}
   	
 	 // Ajax 댓글작성
-    	
-        function writerReply() {
-        	alert("이건뜨나");
-        	let r_content = $("#replyContent").val();
-            $.ajax({
-                url:"tpcontroller?type=reply",
-                type:"post",
-                dataType:"json",
-                data:{
-                	r_content:$("#replyContent").val(),
-                    tp_boardid:"${one.tp_boardid}"
-                },
-                success:function(data) {
-                	alert("댓글성공");
-                    if(data.result == 1) {            
-                    	// 쿼리 정상 완료, 결과
-                        console.log("comment가 정상적으로 입력되었습니다.");
-                        $("#replyContent").val("");
-                        $("#replyList").prepend("<div>"+data.r_content+"</div>");
-                    } else {
-                    	alert("댓글실패");
-                    }
-                }
-            });
-    }	 
-    
+    	function writerReply() { 
+    	$.ajax({
+    		url: "reply",
+    		type: "post",
+    		dataType:"json",
+    		async:true,
+    		data:{
+    			r_content:$("#replyContent").val(),
+                tp_boardid:"${one.tp_boardid}"
+    		}, success: function(data){
+    			getReplyList(data);
+    		}
+    	});
+	 }	
+	
+	 // 댓글 삭제
+    $(document).on("click", ".deleteBtn", function() {
+    	if(confirm("댓글을 삭제하시겠습니까?")) {
+    		var tp_replyid = $(this).parent().parent().data("tp_replyid");
+    		var tp_boardid = $(this).parent().parent().data("tp_boardid");
+			console.log("replyno " + tp_replyid);
+			console.log("tp_boardid " + tp_boardid);
+			$.ajax({
+	            url : 'delete?tp_replyid='+tp_replyid+'&tp_boardid='+tp_boardid,
+	            type : 'GET',
+	            dataType : 'json',
+	            success : function(data) {       
+	            	getReplyList(data);
+	            }       
+	      }); 
+    	}
+    });
    
+	// 댓글 수정 버튼 클릭 -> 폼 변경 -> 데이터 담기
+    $(document).on("click", ".modifyReply", function() {
+	   if(confirm("댓글을 수정하시겠습니까?")) {
+	   		var tp_replyid = $(this).parent().parent().data("tp_replyid");
+   	   		//var tp_boardid = $(this).parent().parent().data("tp_boardid");
+       $.ajax({
+            url : 'modifyreply?tp_replyid='+tp_replyid, //+'&tp_boardid='+tp_boardid,
+            type : 'GET',
+            contentType : 'application/json;charset=UTF-8',
+            dataType : 'json',
+            success : function(data) {
+               ModifyReplyForm(data);
+            }  
+      }); 
+	 }
+   });
+	
+	// 댓글 폼 만들기
+	function ModifyReplyForm(reply) {
+		
+		var output = "";
+	      output += '   <div class="media-body" id="modifyComplete">';
+	      output += '     <h6><b>' + reply.r_writer +'</b></h6>';
+	      output += '     <div style="float:left" data-tp_replyid="' + reply.tp_replyid + '" data-tp_boardid="' + reply.tp_boardid + '">';
+	      output += '        <textarea id="modifiedContent" rows="4" style="width:706px" placeholder="내용을 입력해주세요">' + reply.r_content +'</textarea>';      
+	      output += '        <button id= "modifyComplete" >수정</button>';
+	      output += '     </div>';
+	      output += '   </div>';
+	   $("#modi").append(output);   
+	   
+	}
+	
+	// 댓글 수정완료버튼
+	
+	 $(document).on("click", "#modifyComplete", function() {
+	      var r_content = $("#modifiedContent").val();
+	      var tp_boardid = $(this).parent().data("tp_boardid");
+	      var tp_replyid  = $(this).parent().data("tp_replyid");
+
+	       if(r_content.trim().length != 0) {
+	         $.ajax({
+	            url : 'modifyok?tp_replyid='+tp_replyid+'&tp_boardid='+tp_boardid+'&r_content='+r_content,
+	            type : 'post',
+	            contentType : 'application/json;charset=UTF-8',
+	            dataType : 'json',
+	            success : function() {
+	            	alert("수정이 완료되었습니다.");
+	      	       getReplyList();
+	            }
+	         });
+	      } 
+	      
+	   });
+	
 	// 글 상세 - > 목록으로(메인페이지이동) 
  	function mainGo() {	
 	 	location.href = "tpcontroller?type=main";	
@@ -253,14 +311,10 @@
          
          	<table class='table table-striped table-bordered' style= 'margin-top: 10px;'>
 			 	<tbody id="tbody">
-			   		<tr align='center'>
-			  			
-			   				<c:if test="${rvo.r_writer == rvo.r_writer}">
-			   				<input type="button"  value="수정" id="replyModify">
-			   				<input type="button"  value="삭제" id="replyDelete">
-			   				</c:if>
-			  		</tr>
+			   		
 			 	</tbody>
+			 	<tfoot>
+			 	<tfoot>
 			 </table>	
       
          		<!-- 댓글 라인 -->
@@ -269,6 +323,8 @@
 			</div>
 
 				<!-- 댓글 작성창 -->
+				<div id ="modi" class="modi">
+				</div>
 	         <div class="input-group" role="group" aria-label="..." style="margin-top: 10px; width: 100%;">
 	    		<textarea class="form-control" rows="3" id="replyContent" placeholder="댓글을 입력하세요." style="width: 100%;" ></textarea>
 	    		<div class="btn-group btn-group-sm" role="group" aria-label="...">
